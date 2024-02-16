@@ -1,6 +1,6 @@
 use wasmtime::component::{Component, Linker};
 use wasmtime::{Config, Engine, Store};
-use wasmtime_wasi::preview2::{Table, WasiCtx, WasiView, WasiCtxBuilder};
+use wasmtime_wasi::preview2::{ResourceTable, WasiCtx, WasiView, WasiCtxBuilder};
 use futures::executor::block_on;
 use async_trait::async_trait;
 
@@ -15,7 +15,7 @@ wasmtime::component::bindgen!({
 
 struct MyState {
     name: String,
-    table: Table,
+    table: ResourceTable,
     wasi: WasiCtx
 }
 
@@ -28,10 +28,10 @@ impl HelloWorldImports for MyState {
 
 // Needed for wasmtime_wasi::preview2
 impl WasiView for MyState {
-    fn table(&self) -> &Table {
+    fn table(&self) -> &ResourceTable{
         &self.table
     }
-    fn table_mut(&mut self) -> &mut Table {
+    fn table_mut(&mut self) -> &mut ResourceTable {
         &mut self.table
     }
     fn ctx(&self) -> &WasiCtx {
@@ -50,7 +50,8 @@ fn main() -> wasmtime::Result<()> {
     config.wasm_component_model(true)
           .async_support(true);
     let engine = Engine::new(&config)?;
-    let component = Component::from_file(&engine, "../guest/guest.component.wasm")?;
+    // let component = Component::from_file(&engine, "../guest/guest.component.wasm")?;
+    let component = Component::from_file(&engine, "../guest-cargo/target/wasm32-wasi/debug/guest_cargo.wasm")?;
 
     // Instantiation of bindings always happens through a `Linker`.
     // Configuration of the linker is done through a generated `add_to_linker`
@@ -72,7 +73,7 @@ fn main() -> wasmtime::Result<()> {
     // takes the store, component, and linker. This returns the `bindings`
     // structure which is an instance of `HelloWorld` and supports typed access
     // to the exports of the component.
-    let table = Table::new();
+    let table = ResourceTable::new();
 
     let wasi = WasiCtxBuilder::new()
             // .inherit_stderr()

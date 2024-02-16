@@ -1,0 +1,9 @@
+package my:project;
+
+world hello-world {
+    import host: interface {
+        name: func() -> string;
+    }
+
+    export greet: func();
+}
