@@ -51,6 +51,9 @@ fn main() -> Result<()> {
     // Caused by:
     //  0: instance export `get-environment` has the wrong type
     //  1: expected func found nothing
+    //
+    //  I think that reason for this is that we do not bind with the wasi command world as done
+    //  in the other host.
     let component = convert_to_component("../guest-tools/target/wasm32-wasi/debug/guest.wasm")?;
 
     // Create our component and call our generated host function.
