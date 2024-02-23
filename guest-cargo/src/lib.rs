@@ -1,12 +1,12 @@
 mod bindings;
 
-use bindings::Guest;
 use crate::bindings::name;
+use bindings::Guest;
 
 struct Component;
 
 impl Guest for Component {
-       fn greet() {
+    fn greet() {
         println!("Hello {} from the guest", name());
     }
 }
