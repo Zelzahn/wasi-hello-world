@@ -7,7 +7,5 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.75"
-async-trait = "0.1.74"
-futures = { version = "0.3.29", features = ["executor"] }
 wasmtime = "17.0.1"
 wasmtime-wasi = "17.0.1"
